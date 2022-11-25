@@ -16,17 +16,10 @@
 package gba;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 
-import org.python.bouncycastle.util.Arrays;
-
-
-
-import generic.continues.GenericFactory;
+import ghidra.app.util.bin.BinaryReader;
 import ghidra.app.util.bin.ByteProvider;
 import ghidra.app.util.bin.StructConverter;
-import ghidra.app.util.bin.format.FactoryBundledWithBinaryReader;
 import ghidra.program.model.data.ArrayDataType;
 import ghidra.program.model.data.DataType;
 import ghidra.program.model.data.StructureDataType;
@@ -47,12 +40,11 @@ public class GBACartrHeader implements StructConverter {
 	private byte h_complement_check;
 	private byte[] h_reserved2 = new byte[2];
 	
-	private FactoryBundledWithBinaryReader reader;
+	private ByteProvider provider;
 	
-	public static GBACartrHeader createGbaCartrHeader(GenericFactory factory, ByteProvider provider) throws IOException {
-		GBACartrHeader gbaHeader = (GBACartrHeader) factory.create(GBACartrHeader.class);
-		gbaHeader.initGBAHeader(factory, provider);
-		return gbaHeader;
+	public GBACartrHeader(ByteProvider provider) throws IOException {
+		this.provider = provider;
+		initGBAHeader();
 	}
 	
 	/*
@@ -60,8 +52,8 @@ public class GBACartrHeader implements StructConverter {
 	 */
 	public GBACartrHeader() {}
 	
-	private void initGBAHeader(GenericFactory factory, ByteProvider provider) throws IOException {
-		reader = new FactoryBundledWithBinaryReader(factory, provider, true);
+	private void initGBAHeader() throws IOException {
+		BinaryReader reader = new BinaryReader(provider, true);
 		
 		h_rom_entry_point = reader.readNextInt();
 		//h_rom_entry_point = reader.readNextByteArray(4);

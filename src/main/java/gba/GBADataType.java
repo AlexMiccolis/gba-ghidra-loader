@@ -15,7 +15,6 @@
  */
 package gba;
 
-import generic.continues.RethrowContinuesFactory;
 import ghidra.app.util.bin.ByteArrayProvider;
 import ghidra.docking.settings.Settings;
 import ghidra.program.model.data.DataType;
@@ -63,9 +62,8 @@ public class GBADataType extends FactoryStructureDataType {
 			block.getBytes(block.getStart(), bytes);
 			
 			ByteArrayProvider bap = new ByteArrayProvider(bytes);
-			GBACartrHeader gbaHeader = GBACartrHeader.createGbaCartrHeader(RethrowContinuesFactory.INSTANCE, bap);
 			
-			es.add(gbaHeader.toDataType());
+			es.add(new GBACartrHeader(bap).toDataType());
 			
 		} catch (Exception e) {
 			

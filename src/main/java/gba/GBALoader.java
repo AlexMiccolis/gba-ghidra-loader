@@ -18,7 +18,6 @@ package gba;
 import java.io.IOException;
 import java.util.*;
 
-import generic.continues.RethrowContinuesFactory;
 import ghidra.app.util.Option;
 import ghidra.app.util.bin.ByteProvider;
 import ghidra.app.util.importer.MessageLog;
@@ -190,7 +189,7 @@ public class GBALoader extends AbstractLibrarySupportLoader {
 			
 			mapIO(flatAPI, log);
 			
-			GBACartrHeader gbaHeader = GBACartrHeader.createGbaCartrHeader(RethrowContinuesFactory.INSTANCE, provider);
+			GBACartrHeader gbaHeader = new GBACartrHeader(provider);
 			DataType headerDataType = gbaHeader.toDataType();
 			flatAPI.createData(cartr_hdr_start, headerDataType);
 			
