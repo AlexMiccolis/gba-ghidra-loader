@@ -135,8 +135,8 @@ public class GBALoader extends AbstractLibrarySupportLoader {
 		FlatProgramAPI flatAPI = new FlatProgramAPI(program);
 		
 		// First 192 (0xC0) bytes is the Cartridge header
-		// Load base is 0x80000000
-		long LOAD_BASE = 0x80000000;
+		// Load base is 0x8000000
+		long LOAD_BASE = 0x8000000;
 		
 		try {
 			Memory mem = program.getMemory();
@@ -171,7 +171,12 @@ public class GBALoader extends AbstractLibrarySupportLoader {
 			memblock.setRead(true);
 			memblock.setWrite(true);
 			memblock.setExecute(false);
-			
+			// SRAM - Cartridge RAM
+			memblock = mem.createUninitializedBlock("SRAM", flatAPI.toAddr(0xE000000), 0x10000, false);
+			memblock.setRead(true);
+			memblock.setWrite(true);
+			memblock.setExecute(false);
+						
 			// ROM
 			// Cartridge header memory block
 			final long cartr_hdr_size = 0xC0;
